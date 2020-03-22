@@ -1,11 +1,13 @@
 use std::env;
-use std::fs::File;
-use std::io::Read;
 
+mod bus;
 mod cpu;
-mod mmc;
+mod cartridge;
+mod ines;
+mod mappers;
 
 use cpu::CPU;
+use cartridge::Cartridge;
 
 fn main() {
     let rom_path = match env::args().nth(1) {
@@ -16,28 +18,19 @@ fn main() {
         }
     };
 
-    let rom = match File::open(&rom_path) {
-        Ok(file) => file,
+    match ines::load_file(&rom_path) {
+        Ok(mut cart) => emulate(&mut cart),
         Err(_) => {
-            println!("Error opening file at {}. Exiting program...", rom_path);
+            println!("Failed reading rom file. Exiting program...");
             std::process::exit(1);
         }
-    };
-
-    let mut data: Vec<u8> = Vec::new();
-
-    for (_, byte) in rom.bytes().enumerate() {
-        let byte = match byte {
-            Ok(byte) => byte,
-            Err(msg) => {
-                println!("Error loading rom: {}", msg);
-                std::process::exit(1);
-            }
-        };
-        data.push(byte);
     }
-
-    let cpu = CPU::new(data);
-    cpu.cycle();
-
 }
+
+fn emulate(cart: &mut Cartridge) {
+    println!("Loaded rom with {:?}", cart.flags);
+
+    let cpu = CPU::new(cart);
+    cpu.cycle();
+}
+
