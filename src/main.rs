@@ -5,6 +5,7 @@ mod cpu;
 mod cartridge;
 mod ines;
 mod mappers;
+mod ppu;
 
 use cpu::CPU;
 use cartridge::Cartridge;
@@ -30,7 +31,9 @@ fn main() {
 fn emulate(cart: &mut Cartridge) {
     println!("Loaded rom with {:?}", cart.flags);
 
-    let cpu = CPU::new(cart);
-    cpu.cycle();
+    let mut cpu = CPU::new(cart);
+    loop {
+        cpu.cycle();
+    }
 }
 

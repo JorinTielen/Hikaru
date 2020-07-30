@@ -1,10 +1,9 @@
 //! Accessing data on a Cartridge through Mappers.
 //!
-//! This module contains various mappers and their
-//! implementation. A mapper is responsible for
-//! managing the different banks of memory there
-//! could be on a cartridge, and allowing the CPU
-//! to access them from the Bus' address space.
+//! This module contains various mappers and their implementations. A mapper
+//! is responsible for managing the different banks of memory there could be
+//! on a cartridge, and allowing the CPU to access them from the Bus' address
+//! space.
 
 mod nrom;
 
